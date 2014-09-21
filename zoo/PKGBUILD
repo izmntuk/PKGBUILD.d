@@ -1,0 +1,49 @@
+pkgname=zoo
+pkgver=2.10.1
+pkgrel=1
+pkgdesc='Manipulate the ancient .zoo format archives'
+arch=('i686' 'x86_64' 'sparc')
+license=('custom:zoo')
+url='ftp://ftp.kiarchive.ru/pub/unix/arcers'
+depends=('glibc')
+source=('https://mirrors.kernel.org/gentoo/distfiles/zoo-2.10pl1.tar.gz'
+	'https://mirrors.kernel.org/gentoo/distfiles/zoo-2.10-gcc-issues-fix.patch'
+	'https://mirrors.kernel.org/gentoo-portage/app-arch/zoo/files/zoo-2.10-CAN-2005-2349.patch'
+	'https://mirrors.kernel.org/gentoo-portage/app-arch/zoo/files/zoo-2.10-febz-183426.patch'
+	'https://mirrors.kernel.org/gentoo-portage/app-arch/zoo/files/zoo-2.10-gentoo-fbsd.patch'
+	'https://mirrors.kernel.org/gentoo-portage/app-arch/zoo/files/zoo-2.10-multiple-dos-fix.patch'
+	'https://mirrors.kernel.org/gentoo-portage/app-arch/zoo/files/zoo-2.10-security_pathsize.patch')
+sha1sums=(
+	'c02d96148ee57df01596d0c8d07a3e327b821600'
+	'aa57e1b5f493d3edaacd42fc9771ca827896ed0d'
+	'fd54301d2e4f2da318f59b102d629d1921979ab0'
+	'7714a923933c96091473e7e528d9bb805059b143'
+	'e33cb7e446a0d3e76b6015a59ea0c3c0f38771b5'
+	'ed7381978c2004c6c8a034306d5de8f9cb91f469'
+	'45593c3f15968b876e343f1cddcf3a18e9d5e1bb')
+
+prepare() {
+	cd "${srcdir}"
+	patch -p1 -i 'zoo-2.10-gcc-issues-fix.patch'
+	patch -i 'zoo-2.10-CAN-2005-2349.patch'
+	patch -p1 -i 'zoo-2.10-febz-183426.patch'
+	patch -i 'zoo-2.10-gentoo-fbsd.patch'
+	patch -p1 -i 'zoo-2.10-multiple-dos-fix.patch'
+	patch -i 'zoo-2.10-security_pathsize.patch'
+}
+build() {
+	cd "${srcdir}"
+	make linux
+}
+package() {
+	cd "${srcdir}"
+	install -d \
+		"${pkgdir}/usr/share/licenses/${pkgname}" \
+		"${pkgdir}/usr/share/man/man1" \
+		"${pkgdir}/usr/bin"
+	install -Dm644 /tmp/zoo/src/Copyright "${pkgdir}/usr/share/licenses/${pkgname}/COPYRIGHT"
+	install -m644 zoo.1 "${pkgdir}/usr/share/man/man1"
+	install -m644 fiz.1 "${pkgdir}/usr/share/man/man1"
+	install -m755 zoo "${pkgdir}/usr/bin"
+	install -m755 fiz "${pkgdir}/usr/bin"
+}

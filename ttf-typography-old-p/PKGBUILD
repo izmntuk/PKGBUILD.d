@@ -1,0 +1,18 @@
+pkgname=ttf-typography-old-p
+pkgdesc='An old-style Chinese font for typography. (舊刊宋)'
+pkgver=1.93
+pkgrel=1
+arch=('any')
+license=('CCPL:cc-by-nc-sa-3.0')
+depends=('fontconfig' 'xorg-font-utils')
+install='INSTALL'
+options=('!strip')
+source=("typography-old-p_${pkgver}.ttf")
+sha1sums=('26790dc27e36c7c480e6bcb15e05864a653ec6c7')
+sha256sums=('c1bf2330cca71fbb1d6365bc27ebb7b2e8d060e288e5a2aa32ceca70552be36b')
+
+package() {
+	cd "${srcdir}"
+	install -d "${pkgdir}/usr/share/fonts/TTF"
+	install -pm644 "typography-old-p_${pkgver}.ttf" "${pkgdir}/usr/share/fonts/TTF"
+}

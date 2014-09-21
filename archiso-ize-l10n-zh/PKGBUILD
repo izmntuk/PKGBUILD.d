@@ -1,0 +1,24 @@
+## Contributor: Gerardo Exequiel Pozzi <vmlinuz386@yahoo.com.ar>
+## Contributor: Pierre Schmitz <pierre@archlinux.de>
+pkgname=archiso-ize-l10n-zh
+pkgver=git
+pkgrel=1
+pkgdesc='Tools for creating Arch Linux live and install iso images. Forked version, with some enhancement'
+arch=('any')
+license=('GPL')
+url='https://github.com/izmntuk/archiso'
+depends=('make' 'arch-install-scripts' 'squashfs-tools' 'libisoburn' 'dosfstools' 'lynx')
+provides=('archiso')
+conflicts=('archiso' 'archiso-git' 'archiso-ize')
+makedepends=('git')
+source=('git+https://github.com/izmntuk/archiso#branch=testing-l10n-zh')
+sha1sums=('SKIP')
+
+pkgver() {
+	cd archiso
+	git describe --long|sed 's|-|.|g;s|^v||'
+}
+
+package() {
+	make -C archiso DESTDIR="${pkgdir}" install
+}

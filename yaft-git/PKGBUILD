@@ -1,0 +1,33 @@
+pkgname=yaft-git
+pkgver=20140829
+pkgrel=1
+pkgdesc="yet another framebuffer terminal - git"
+url="https://github.com/uobikiemukot/yaft"
+license=('MIT')
+arch=('i686' 'x86_64')
+conflicts=('yaft')
+depends=('zsh')
+makedepends=('ncurses' 'git' 'bdf-unifont')
+optdepends=('fbv: needed to set wallpaper')
+source=('git+https://github.com/uobikiemukot/yaft.git' 'customization.patch')
+sha1sums=('SKIP' 'SKIP')
+
+## Currently, this package doesn't build fine with devtools' makechrootpkg, weird, not sure if this is a bug of mkfont_bdf or devtools
+
+pkgver() {
+	cd "${srcdir}/yaft"
+	git log -1 --format="%cd" --date=short | sed 's|-||g'
+}
+
+prepare() {
+	patch -p 1 -i "${srcdir}/customization.patch" -d "${srcdir}/yaft"
+}
+
+build() {
+	make -C "${srcdir}/yaft"
+}
+
+package() {
+	make -C "${srcdir}/yaft" DESTDIR="${pkgdir}" install
+	install -pDm644 "${srcdir}/yaft/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

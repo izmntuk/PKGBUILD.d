@@ -1,0 +1,50 @@
+diff --git a/conf.h b/conf.h
+index 4867194..4051c57 100644
+--- a/conf.h
++++ b/conf.h
+@@ -3,8 +3,8 @@
+ enum {
+ 	DEFAULT_FG           = 7,
+ 	DEFAULT_BG           = 0,
+-	ACTIVE_CURSOR_COLOR  = 2,
+-	PASSIVE_CURSOR_COLOR = 1,
++	ACTIVE_CURSOR_COLOR  = 15,
++	PASSIVE_CURSOR_COLOR = 8,
+ };
+ 
+ /* misc */
+@@ -35,9 +35,5 @@ const char *term_name = "yaft-256color";
+ //const char *fb_path = "/dev/graphics/fb0"; /* for Android */
+ 
+ /* shell: refer SHELL environment at first */
+-#if defined(__linux__) || defined(__MACH__)
+-	const char *shell_cmd = "/bin/bash";
+-#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+-	const char *shell_cmd = "/bin/csh";
+-#endif
++const char *shell_cmd = "/bin/zsh";
+ //const char *shell_cmd = "/system/bin/sh"; /* for Android */
+diff --git a/makefile b/makefile
+index caf405f..f25ef8a 100644
+--- a/makefile
++++ b/makefile
+@@ -28,7 +28,7 @@ glyph.h: mkfont_bdf
+ 	# usage: mkfont_bdf ALIAS BDF1 BDF2 BDF3... > glyph.h
+ 	# ALIAS: glyph substitution rule file (see table/alias for more detail)
+ 	# BDF1 BDF2 BDF3...: monospace bdf files (must be the same size)
+-	./mkfont_bdf table/alias fonts/milkjf_k16.bdf fonts/milkjf_8x16r.bdf fonts/milkjf_8x16.bdf > glyph.h
++	./mkfont_bdf /dev/null /usr/share/fonts/misc/unifont.bdf > glyph.h
+ 
+ yaft: yaft.c $(HDR)
+ 	# If you want to change configuration, please modify conf.h before make (see conf.h for more detail)
+diff --git a/table/alias b/table/alias
+index b3dbf82..7e10bd7 100644
+--- a/table/alias
++++ b/table/alias
+@@ -1,5 +1,5 @@
+ # use WAVE DASH for FULLWIDTH TILDE
+-0xFF5E 0x301C
++#0xFF5E 0x301C
+ # use TILDE for SMALL TILDE
+ 0x02DC 0x007E
+ # use HYPHEN-MINUS for MINUS SIGN
